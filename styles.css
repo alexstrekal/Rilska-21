@@ -227,6 +227,10 @@ body {
   table-layout: fixed;
 }
 
+.expense-table--wide {
+  min-width: 980px;
+}
+
 .expense-table th,
 .expense-table td {
   padding: 0;

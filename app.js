@@ -10,7 +10,14 @@
     },
     {
       id: "september",
-      expenses: ["stairsSep", "elevSep"],
+      expenses: [
+        "stairsAug",
+        "elevAug",
+        "stairsSep",
+        "elevSep",
+        "elevator",
+        "connectivity",
+      ],
     },
   ];
 
@@ -34,9 +41,14 @@
         elevAug: "Ток асансьор (август)",
         stairsSep: "Ток стълби",
         elevSep: "Ток асансьор",
-        elevator: "Асансьор (септември)",
+        elevator: "Асансьор, месечна такса",
         connectivity: "Асансьор, годишна такса свързаност",
         total: "Общо",
+      },
+      viewColumns: {
+        alexander: {
+          elevator: "Асансьор (септември)",
+        },
       },
       billRow: "Общо по<br>сметка",
       ground: "Партер",
@@ -60,9 +72,14 @@
         elevAug: "Эл. лифт (август)",
         stairsSep: "Эл. лестница",
         elevSep: "Эл. лифт",
-        elevator: "Лифт (сентябрь)",
+        elevator: "Лифт, месячная плата",
         connectivity: "Лифт, годовая плата за связь",
         total: "Итого",
+      },
+      viewColumns: {
+        alexander: {
+          elevator: "Лифт (сентябрь)",
+        },
       },
       billRow: "Итого по<br>счёту",
       ground: "Партер",
@@ -261,18 +278,28 @@
     window.scrollTo(0, 0);
   }
 
+  function columnLabel(dict, viewId, key) {
+    return dict.viewColumns?.[viewId]?.[key] || dict.columns[key];
+  }
+
   function renderTable() {
     const dict = i18n[state.lang];
     const view = currentView();
     const expenseKeys = view.expenses;
     const cols = ["apt", "residents", ...expenseKeys, "total"];
 
+    els.expenseTable.classList.toggle("expense-table--wide", view.id === "september");
+
     els.tableHead.innerHTML = `
       <tr>
         ${cols
           .map((key) => {
             const sticky = key === "apt" ? " sticky-col" : "";
-            return `<th class="${sticky}"><div class="cell cell--head">${dict.columns[key]}</div></th>`;
+            return `<th class="${sticky}"><div class="cell cell--head">${columnLabel(
+              dict,
+              view.id,
+              key
+            )}</div></th>`;
           })
           .join("")}
       </tr>
