@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="Разпределение на разходи — ул. Рилска № 21" />
+  <title>Разпределение на разходи 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="header__brand">
+        <h1 class="header__title" data-i18n="title">Разпределение на разходи 2026</h1>
+        <p class="header__subtitle" data-i18n="subtitle">ул. Рилска № 21</p>
+      </div>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" class="lang-btn is-active" data-lang="bg" aria-pressed="true">BG</button>
+        <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
+      </div>
+    </header>
+
+    <nav class="month-tabs" role="tablist" aria-label="Months" id="monthTabs"></nav>
+
+    <main class="board">
+      <div class="table-shell">
+        <div class="table-scroll" id="tableScroll">
+          <table class="expense-table" id="expenseTable">
+            <thead id="tableHead"></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+        <p class="board__hint" data-i18n="hint">Плъзнете хоризонтално, за да видите всички колони</p>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p data-i18n="footerNote">Сумите се разпределят според броя живущи в апартамента.</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

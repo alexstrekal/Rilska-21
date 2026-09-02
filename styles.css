@@ -1,0 +1,420 @@
+:root {
+  --bg-top: #5ba4cf;
+  --bg-mid: #7bb8d9;
+  --bg-bottom: #c5dde9;
+  --surface: rgba(255, 255, 255, 0.92);
+  --surface-solid: #ffffff;
+  --ink: #172b4d;
+  --ink-muted: #5e6c84;
+  --accent: #0079bf;
+  --accent-soft: #e4f0f9;
+  --accent-strong: #055a8f;
+  --success: #61bd4f;
+  --success-bg: #e3fce4;
+  --border: rgba(9, 30, 66, 0.08);
+  --shadow-soft: 0 1px 0 rgba(9, 30, 66, 0.12);
+  --shadow-card: 0 2px 8px rgba(9, 30, 66, 0.12);
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-body: "Nunito", system-ui, sans-serif;
+  --sticky-bg: #ebf3f9;
+  --total-row: #dfefff;
+  --paid-empty: #f4f5f7;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 500px at 10% -10%, rgba(255, 255, 255, 0.35), transparent 55%),
+    radial-gradient(900px 420px at 90% 0%, rgba(255, 255, 255, 0.22), transparent 50%),
+    linear-gradient(165deg, var(--bg-top) 0%, var(--bg-mid) 42%, var(--bg-bottom) 100%);
+  background-attachment: fixed;
+}
+
+.page {
+  width: min(1180px, calc(100% - 1.5rem));
+  margin: 0 auto;
+  padding: 1.25rem 0 2.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  animation: rise 0.55s ease both;
+}
+
+.header__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 4vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(9, 30, 66, 0.18);
+}
+
+.header__subtitle {
+  margin: 0.35rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.lang-switch {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(8px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+}
+
+.lang-btn {
+  appearance: none;
+  border: 0;
+  min-width: 44px;
+  min-height: 36px;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
+  touch-action: manipulation;
+}
+
+.lang-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.lang-btn:active {
+  transform: scale(0.96);
+}
+
+.lang-btn.is-active {
+  background: #fff;
+  color: var(--accent-strong);
+  box-shadow: var(--shadow-soft);
+}
+
+.month-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  padding: 0.15rem 0.1rem 0.85rem;
+  margin-bottom: 0.35rem;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  animation: rise 0.65s ease both;
+}
+
+.month-tabs::-webkit-scrollbar {
+  height: 6px;
+}
+
+.month-tabs::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+}
+
+.month-tab {
+  appearance: none;
+  border: 0;
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  min-height: 42px;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
+  touch-action: manipulation;
+}
+
+.month-tab:hover:not(:disabled):not(.is-selected) {
+  background: #fff;
+  box-shadow: var(--shadow-card);
+}
+
+.month-tab:active:not(:disabled) {
+  transform: scale(0.97);
+  background: #e8f3fa;
+}
+
+.month-tab.is-selected {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0, 121, 191, 0.35);
+}
+
+.month-tab.is-selected:hover {
+  background: var(--accent-strong);
+}
+
+.month-tab:disabled,
+.month-tab.is-disabled {
+  background: rgba(255, 255, 255, 0.28);
+  color: rgba(23, 43, 77, 0.38);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.board {
+  animation: rise 0.75s ease both;
+}
+
+.table-shell {
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem;
+  box-shadow: 0 8px 28px rgba(9, 30, 66, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+.table-scroll {
+  overflow: auto;
+  border-radius: var(--radius-md);
+  -webkit-overflow-scrolling: touch;
+  max-height: min(70dvh, 820px);
+}
+
+.expense-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0.45rem;
+  min-width: 920px;
+}
+
+.expense-table th,
+.expense-table td {
+  padding: 0;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.expense-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-solid);
+  box-shadow: var(--shadow-soft);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.cell--head {
+  min-height: 58px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+.cell--apt {
+  justify-content: flex-start;
+  font-weight: 800;
+  background: var(--sticky-bg);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.cell--muted {
+  color: var(--ink-muted);
+  background: #f8fafc;
+}
+
+.cell--money {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+.cell--total {
+  background: #eef8e8;
+  color: #2d6a22;
+  font-weight: 800;
+}
+
+.cell--bill {
+  background: var(--total-row);
+  font-weight: 800;
+}
+
+.cell--na {
+  color: #9aa5b5;
+  background: #f4f5f7;
+  font-weight: 600;
+}
+
+.cell--paid {
+  min-height: 46px;
+  background: var(--paid-empty);
+}
+
+.cell--paid.is-paid {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.paid-mark {
+  width: 1.35rem;
+  height: 1.35rem;
+  display: block;
+}
+
+.sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+
+.expense-table thead .sticky-col {
+  z-index: 4;
+}
+
+.expense-table tbody tr.is-bill .cell--apt {
+  background: #d6e8f7;
+}
+
+.board__hint {
+  display: none;
+  margin: 0.65rem 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.footer {
+  margin-top: 1rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.88rem;
+  font-weight: 600;
+  animation: rise 0.85s ease both;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.empty-month {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--ink-muted);
+  font-weight: 700;
+  background: var(--surface-solid);
+  border-radius: var(--radius-md);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 760px) {
+  .page {
+    width: min(100% - 1rem, 1180px);
+    padding-top: 1rem;
+  }
+
+  .header {
+    align-items: center;
+  }
+
+  .header__title {
+    font-size: 1.35rem;
+  }
+
+  .header__subtitle {
+    font-size: 0.95rem;
+  }
+
+  .table-shell {
+    padding: 0.5rem;
+  }
+
+  .board__hint {
+    display: block;
+  }
+
+  .expense-table {
+    border-spacing: 0.35rem;
+  }
+
+  .cell {
+    min-height: 42px;
+    font-size: 0.86rem;
+    padding: 0.45rem 0.5rem;
+  }
+
+  .cell--head {
+    min-height: 52px;
+    font-size: 0.72rem;
+  }
+}
+
+@media (hover: none) {
+  .month-tab:hover:not(:disabled):not(.is-selected) {
+    background: rgba(255, 255, 255, 0.55);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .lang-btn:hover {
+    background: transparent;
+  }
+}
