@@ -276,6 +276,13 @@ body {
   white-space: nowrap;
 }
 
+.is-bill .cell--apt {
+  white-space: normal;
+  text-wrap: balance;
+  line-height: 1.2;
+  text-align: left;
+}
+
 .cell--muted {
   color: var(--ink-muted);
   background: #f8fafc;
