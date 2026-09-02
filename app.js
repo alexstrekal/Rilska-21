@@ -1,17 +1,17 @@
 (() => {
-  const MONTHS = [
-    "january",
-    "february",
-    "march",
-    "april",
-    "may",
-    "june",
-    "july",
-    "august",
-    "september",
-    "october",
-    "november",
-    "december",
+  const VIEWS = [
+    {
+      id: "emilia",
+      expenses: ["stairsAug", "elevAug"],
+    },
+    {
+      id: "alexander",
+      expenses: ["elevator", "connectivity"],
+    },
+    {
+      id: "september",
+      expenses: ["stairsSep", "elevSep"],
+    },
   ];
 
   const i18n = {
@@ -20,21 +20,12 @@
       subtitle: "ул. Рилска № 21",
       hint: "Плъзнете хоризонтално, за да видите всички колони",
       footerNote: "Сумите се разпределят според броя живущи в апартамента.",
-      emptyMonth: "Все още няма данни за този месец.",
-      currency: "лв.",
-      months: {
-        january: "януари",
-        february: "февруари",
-        march: "март",
-        april: "април",
-        may: "май",
-        june: "юни",
-        july: "юли",
-        august: "август",
-        september: "септември",
-        october: "октомври",
-        november: "ноември",
-        december: "декември",
+      emptyView: "Все още няма данни.",
+      tabsLabel: "Таблици",
+      views: {
+        emilia: "Емилия",
+        alexander: "Александър",
+        september: "Септември",
       },
       columns: {
         apt: "Ап",
@@ -44,9 +35,8 @@
         stairsSep: "Ток стълби (септември)",
         elevSep: "Ток асансьор (септември)",
         elevator: "Асансьор",
-        connectivity: "Асансьор, годишна такса свързаност",
+        connectivity: "Годишна такса свързаност",
         total: "Общо",
-        paid: "Платено",
       },
       billRow: "Общо по сметка",
       ground: "Партер",
@@ -56,21 +46,12 @@
       subtitle: "ул. Рилска № 21",
       hint: "Проведите в сторону, чтобы увидеть все колонки",
       footerNote: "Суммы распределяются по числу проживающих в квартире.",
-      emptyMonth: "Данных за этот месяц пока нет.",
-      currency: "лв.",
-      months: {
-        january: "январь",
-        february: "февраль",
-        march: "март",
-        april: "апрель",
-        may: "май",
-        june: "июнь",
-        july: "июль",
-        august: "август",
-        september: "сентябрь",
-        october: "октябрь",
-        november: "ноябрь",
-        december: "декабрь",
+      emptyView: "Данных пока нет.",
+      tabsLabel: "Таблицы",
+      views: {
+        emilia: "Эмилия",
+        alexander: "Александр",
+        september: "Сентябрь",
       },
       columns: {
         apt: "Кв",
@@ -80,24 +61,13 @@
         stairsSep: "Эл. лестница (сентябрь)",
         elevSep: "Эл. лифт (сентябрь)",
         elevator: "Лифт",
-        connectivity: "Лифт, годовая плата за связь",
+        connectivity: "Годовая плата за связь",
         total: "Итого",
-        paid: "Оплачено",
       },
       billRow: "Итого по счёту",
       ground: "Партер",
     },
   };
-
-  /** Expense categories and who participates */
-  const EXPENSE_KEYS = [
-    "stairsAug",
-    "elevAug",
-    "stairsSep",
-    "elevSep",
-    "elevator",
-    "connectivity",
-  ];
 
   const STAIRS_PAYERS = new Set([
     "ground",
@@ -140,43 +110,27 @@
     { id: "11", residents: 0 },
   ];
 
-  /**
-   * Month data. Add new months here as bills arrive.
-   * paid: set of apartment ids that have paid.
-   */
-  const monthData = {
-    september: {
-      bills: {
-        stairsAug: 7.64,
-        elevAug: 13.28,
-        stairsSep: 0,
-        elevSep: 0,
-        elevator: 33.49,
-        connectivity: 37.07,
-      },
-      paid: new Set(),
-    },
+  const bills = {
+    stairsAug: 7.64,
+    elevAug: 13.28,
+    stairsSep: 0,
+    elevSep: 0,
+    elevator: 33.49,
+    connectivity: 37.07,
   };
 
   const state = {
     lang: "bg",
-    month: defaultMonth(),
+    view: "emilia",
     hasSettledInitialScroll: false,
   };
 
   const els = {
-    monthTabs: document.getElementById("monthTabs"),
+    viewTabs: document.getElementById("viewTabs"),
     tableHead: document.getElementById("tableHead"),
     tableBody: document.getElementById("tableBody"),
     expenseTable: document.getElementById("expenseTable"),
-    tableScroll: document.getElementById("tableScroll"),
   };
-
-  function defaultMonth() {
-    const now = new Date();
-    const idx = now.getFullYear() === 2026 ? now.getMonth() : 8;
-    return MONTHS[idx] || "september";
-  }
 
   function round2(value) {
     return Math.round((value + Number.EPSILON) * 100) / 100;
@@ -184,8 +138,7 @@
 
   function formatMoney(value) {
     if (value === null || value === undefined) return "—";
-    const fixed = round2(value).toFixed(2);
-    return fixed.replace(".", ",");
+    return round2(value).toFixed(2).replace(".", ",");
   }
 
   function peopleInGroup(payerSet) {
@@ -207,18 +160,30 @@
     return id === "ground" ? dict.ground : id;
   }
 
-  function checkSvg() {
-    return `
-      <svg class="paid-mark" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-        <path fill="currentColor" d="M8.2 14.4 4.6 10.8l1.4-1.4 2.2 2.2 5.2-5.2 1.4 1.4z"/>
-      </svg>
-    `;
+  function currentView() {
+    return VIEWS.find((view) => view.id === state.view) || VIEWS[0];
+  }
+
+  function equalizeRowHeights() {
+    const rows = els.expenseTable.querySelectorAll("tr");
+    rows.forEach((row) => {
+      const cells = [...row.querySelectorAll(".cell")];
+      if (!cells.length) return;
+      cells.forEach((cell) => {
+        cell.style.minHeight = "";
+      });
+      const maxHeight = Math.max(...cells.map((cell) => cell.offsetHeight));
+      cells.forEach((cell) => {
+        cell.style.minHeight = `${maxHeight}px`;
+      });
+    });
   }
 
   function renderI18nStatic() {
     const dict = i18n[state.lang];
     document.documentElement.lang = state.lang === "bg" ? "bg" : "ru";
     document.title = dict.title;
+    els.viewTabs.setAttribute("aria-label", dict.tabsLabel);
 
     document.querySelectorAll("[data-i18n]").forEach((node) => {
       const key = node.getAttribute("data-i18n");
@@ -232,48 +197,34 @@
     });
   }
 
-  function renderMonthTabs() {
+  function renderViewTabs() {
     const dict = i18n[state.lang];
-    els.monthTabs.innerHTML = "";
+    els.viewTabs.innerHTML = "";
 
-    MONTHS.forEach((monthKey) => {
+    VIEWS.forEach((view) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "month-tab";
       btn.setAttribute("role", "tab");
-      btn.dataset.month = monthKey;
-      btn.textContent = dict.months[monthKey];
+      btn.dataset.view = view.id;
+      btn.textContent = dict.views[view.id];
 
-      const hasData = Boolean(monthData[monthKey]);
-      const selected = state.month === monthKey;
+      const selected = state.view === view.id;
+      btn.classList.toggle("is-selected", selected);
+      btn.setAttribute("aria-selected", selected ? "true" : "false");
 
-      if (!hasData) {
-        btn.disabled = true;
-        btn.classList.add("is-disabled");
-        btn.setAttribute("aria-disabled", "true");
-      }
+      btn.addEventListener("click", () => {
+        state.view = view.id;
+        render();
+        btn.blur();
+      });
 
-      if (selected) {
-        btn.classList.add("is-selected");
-        btn.setAttribute("aria-selected", "true");
-      } else {
-        btn.setAttribute("aria-selected", "false");
-      }
-
-      if (hasData) {
-        btn.addEventListener("click", () => {
-          state.month = monthKey;
-          render();
-        });
-      }
-
-      els.monthTabs.appendChild(btn);
+      els.viewTabs.appendChild(btn);
     });
 
-    // After layout: keep selected month in the tabs viewport (centered when possible).
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        scrollSelectedMonthIntoView(false);
+        scrollSelectedTabIntoView(false);
         if (!state.hasSettledInitialScroll) {
           lockPageToTop();
           state.hasSettledInitialScroll = true;
@@ -282,8 +233,8 @@
     });
   }
 
-  function scrollSelectedMonthIntoView(smooth) {
-    const scroller = els.monthTabs;
+  function scrollSelectedTabIntoView(smooth) {
+    const scroller = els.viewTabs;
     const selectedBtn = scroller.querySelector(".is-selected");
     if (!selectedBtn) return;
 
@@ -294,8 +245,6 @@
     const target =
       selectedBtn.offsetLeft + selectedBtn.offsetWidth / 2 - scrollerWidth / 2;
     const nextLeft = Math.min(maxScroll, Math.max(0, target));
-
-    // Keep the page scroll put — iOS often shifts the window when a nested scroller moves.
     const pageX = window.scrollX;
     const pageY = window.scrollY;
 
@@ -314,21 +263,9 @@
 
   function renderTable() {
     const dict = i18n[state.lang];
-    const data = monthData[state.month];
-
-    if (!data) {
-      els.tableHead.innerHTML = "";
-      els.tableBody.innerHTML = `<tr><td colspan="10"><div class="empty-month">${dict.emptyMonth}</div></td></tr>`;
-      return;
-    }
-
-    const cols = [
-      "apt",
-      "residents",
-      ...EXPENSE_KEYS,
-      "total",
-      "paid",
-    ];
+    const view = currentView();
+    const expenseKeys = view.expenses;
+    const cols = ["apt", "residents", ...expenseKeys, "total"];
 
     els.tableHead.innerHTML = `
       <tr>
@@ -341,61 +278,79 @@
       </tr>
     `;
 
-    const billCells = EXPENSE_KEYS.map((key) => {
-      const amount = data.bills[key] ?? 0;
-      return `<td><div class="cell cell--money cell--bill">${formatMoney(amount)}</div></td>`;
-    }).join("");
-
     const billTotal = round2(
-      EXPENSE_KEYS.reduce((sum, key) => sum + (data.bills[key] ?? 0), 0)
+      expenseKeys.reduce((sum, key) => sum + (bills[key] ?? 0), 0)
     );
 
-    const rows = [];
+    const billCells = expenseKeys
+      .map(
+        (key) =>
+          `<td><div class="cell cell--money cell--bill">${formatMoney(
+            bills[key] ?? 0
+          )}</div></td>`
+      )
+      .join("");
 
-    rows.push(`
+    const rows = [
+      `
       <tr class="is-bill">
         <td class="sticky-col"><div class="cell cell--apt cell--bill">${dict.billRow}</div></td>
         <td><div class="cell cell--muted cell--bill"></div></td>
         ${billCells}
-        <td><div class="cell cell--money cell--total cell--bill">${formatMoney(billTotal)}</div></td>
-        <td><div class="cell cell--paid cell--bill"></div></td>
+        <td><div class="cell cell--money cell--total cell--bill">${formatMoney(
+          billTotal
+        )}</div></td>
       </tr>
-    `);
+    `,
+    ];
 
     APARTMENTS.forEach((apt) => {
       let rowTotal = 0;
-      const moneyCells = EXPENSE_KEYS.map((key) => {
-        const share = shareFor(apt, key, data.bills[key] ?? 0);
-        if (share === null) {
-          return `<td><div class="cell cell--na">—</div></td>`;
-        }
-        rowTotal += share;
-        return `<td><div class="cell cell--money">${formatMoney(share)}</div></td>`;
-      }).join("");
+      let participates = false;
+      const moneyCells = expenseKeys
+        .map((key) => {
+          const share = shareFor(apt, key, bills[key] ?? 0);
+          if (share === null) {
+            return `<td><div class="cell cell--na">—</div></td>`;
+          }
+          participates = true;
+          rowTotal += share;
+          return `<td><div class="cell cell--money">${formatMoney(
+            share
+          )}</div></td>`;
+        })
+        .join("");
 
-      rowTotal = round2(rowTotal);
-      const isPaid = data.paid.has(apt.id);
-      const paidCell = isPaid
-        ? `<div class="cell cell--paid is-paid" aria-label="✓">${checkSvg()}</div>`
-        : `<div class="cell cell--paid"></div>`;
+      const totalDisplay = participates
+        ? formatMoney(round2(rowTotal))
+        : "—";
+      const totalClass = participates
+        ? "cell cell--money cell--total"
+        : "cell cell--na";
 
       rows.push(`
         <tr>
-          <td class="sticky-col"><div class="cell cell--apt">${aptLabel(apt.id, dict)}</div></td>
+          <td class="sticky-col"><div class="cell cell--apt">${aptLabel(
+            apt.id,
+            dict
+          )}</div></td>
           <td><div class="cell cell--muted">${apt.residents}</div></td>
           ${moneyCells}
-          <td><div class="cell cell--money cell--total">${formatMoney(rowTotal)}</div></td>
-          <td>${paidCell}</td>
+          <td><div class="${totalClass}">${totalDisplay}</div></td>
         </tr>
       `);
     });
 
     els.tableBody.innerHTML = rows.join("");
+
+    requestAnimationFrame(() => {
+      equalizeRowHeights();
+    });
   }
 
   function render() {
     renderI18nStatic();
-    renderMonthTabs();
+    renderViewTabs();
     renderTable();
   }
 
@@ -407,21 +362,19 @@
     });
   });
 
-  // If default month has no data, fall back to first available month
-  if (!monthData[state.month]) {
-    const available = Object.keys(monthData)[0];
-    if (available) state.month = available;
-  }
-
   let resizeTimer = 0;
   window.addEventListener("resize", () => {
     window.clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(() => scrollSelectedMonthIntoView(false), 100);
+    resizeTimer = window.setTimeout(() => {
+      scrollSelectedTabIntoView(false);
+      equalizeRowHeights();
+    }, 100);
   });
 
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => {
-      scrollSelectedMonthIntoView(false);
+      scrollSelectedTabIntoView(false);
+      equalizeRowHeights();
       if (!state.hasSettledInitialScroll) {
         lockPageToTop();
       }
