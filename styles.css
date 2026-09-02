@@ -106,7 +106,7 @@ body {
   touch-action: manipulation;
 }
 
-.lang-btn:hover {
+.lang-btn:hover:not(.is-active) {
   background: rgba(255, 255, 255, 0.18);
 }
 
@@ -114,7 +114,9 @@ body {
   transform: scale(0.96);
 }
 
-.lang-btn.is-active {
+.lang-btn.is-active,
+.lang-btn.is-active:hover,
+.lang-btn.is-active:focus {
   background: #fff;
   color: var(--accent-strong);
   box-shadow: var(--shadow-soft);
@@ -171,15 +173,19 @@ body {
   box-shadow: var(--shadow-card);
 }
 
-.month-tab:active:not(:disabled) {
+.month-tab:active:not(:disabled):not(.is-selected) {
   transform: scale(0.97);
   background: #e8f3fa;
 }
 
-.month-tab.is-selected {
+.month-tab.is-selected,
+.month-tab.is-selected:hover,
+.month-tab.is-selected:focus,
+.month-tab.is-selected:active {
   background: var(--accent);
   color: #fff;
   box-shadow: 0 4px 14px rgba(0, 121, 191, 0.35);
+  transform: none;
 }
 
 .month-tab.is-selected:hover {
@@ -414,7 +420,11 @@ body {
     box-shadow: var(--shadow-soft);
   }
 
-  .lang-btn:hover {
+  .lang-btn:hover:not(.is-active) {
     background: transparent;
+  }
+
+  .month-tab.is-selected:hover {
+    background: var(--accent);
   }
 }

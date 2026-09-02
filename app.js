@@ -389,6 +389,7 @@
     btn.addEventListener("click", () => {
       state.lang = btn.dataset.lang;
       render();
+      btn.blur();
     });
   });
 
