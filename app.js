@@ -147,8 +147,8 @@
   const monthData = {
     september: {
       bills: {
-        stairsAug: 4.06,
-        elevAug: 9.7,
+        stairsAug: 7.64,
+        elevAug: 13.28,
         stairsSep: 0,
         elevSep: 0,
         elevator: 33.49,
