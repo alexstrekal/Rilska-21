@@ -32,6 +32,7 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  overflow-anchor: none;
 }
 
 body {
@@ -128,7 +129,6 @@ body {
   gap: 0.5rem;
   overflow-x: auto;
   overscroll-behavior-x: contain;
-  scroll-snap-type: x proximity;
   padding: 0.15rem 0.1rem 0.85rem;
   margin-bottom: 0.35rem;
   scrollbar-width: thin;
@@ -149,7 +149,6 @@ body {
   appearance: none;
   border: 0;
   flex: 0 0 auto;
-  scroll-snap-align: center;
   min-height: 42px;
   padding: 0.55rem 1rem;
   border-radius: 999px;

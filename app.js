@@ -161,6 +161,7 @@
   const state = {
     lang: "bg",
     month: defaultMonth(),
+    hasSettledInitialScroll: false,
   };
 
   const els = {
@@ -271,7 +272,13 @@
 
     // After layout: keep selected month in the tabs viewport (centered when possible).
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => scrollSelectedMonthIntoView(false));
+      requestAnimationFrame(() => {
+        scrollSelectedMonthIntoView(false);
+        if (!state.hasSettledInitialScroll) {
+          lockPageToTop();
+          state.hasSettledInitialScroll = true;
+        }
+      });
     });
   }
 
@@ -288,14 +295,21 @@
       selectedBtn.offsetLeft + selectedBtn.offsetWidth / 2 - scrollerWidth / 2;
     const nextLeft = Math.min(maxScroll, Math.max(0, target));
 
-    if (typeof scroller.scrollTo === "function") {
-      scroller.scrollTo({
-        left: nextLeft,
-        behavior: smooth ? "smooth" : "auto",
-      });
+    // Keep the page scroll put — iOS often shifts the window when a nested scroller moves.
+    const pageX = window.scrollX;
+    const pageY = window.scrollY;
+
+    if (smooth && typeof scroller.scrollTo === "function") {
+      scroller.scrollTo({ left: nextLeft, behavior: "smooth" });
     } else {
       scroller.scrollLeft = nextLeft;
     }
+
+    window.scrollTo(pageX, pageY);
+  }
+
+  function lockPageToTop() {
+    window.scrollTo(0, 0);
   }
 
   function renderTable() {
@@ -406,8 +420,24 @@
   });
 
   if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => scrollSelectedMonthIntoView(false));
+    document.fonts.ready.then(() => {
+      scrollSelectedMonthIntoView(false);
+      if (!state.hasSettledInitialScroll) {
+        lockPageToTop();
+      }
+    });
   }
+
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
+  lockPageToTop();
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted || !state.hasSettledInitialScroll) {
+      lockPageToTop();
+    }
+  });
 
   render();
 })();
