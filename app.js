@@ -1,12 +1,45 @@
 (() => {
+  const APT_IDS = [
+    "ground",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+  ];
+
+  const STAIRS_PAYERS = new Set(APT_IDS);
+  const FULL_PAYERS = new Set(["4", "5", "6", "7", "8", "9", "10", "11"]);
+
+  const CATEGORY_PAYERS = {
+    stairsAug: STAIRS_PAYERS,
+    stairsSep: STAIRS_PAYERS,
+    stairsOct: STAIRS_PAYERS,
+    elevAug: FULL_PAYERS,
+    elevSep: FULL_PAYERS,
+    elevOct: FULL_PAYERS,
+    elevator: FULL_PAYERS,
+    connectivity: FULL_PAYERS,
+  };
+
   const VIEWS = [
     {
       id: "emilia",
+      hidden: true,
       expenses: ["stairsAug", "elevAug"],
+      dataKey: "september",
     },
     {
       id: "alexander",
+      hidden: true,
       expenses: ["elevator", "connectivity"],
+      dataKey: "september",
     },
     {
       id: "september",
@@ -18,8 +51,62 @@
         "elevator",
         "connectivity",
       ],
+      dataKey: "september",
+    },
+    {
+      id: "october",
+      expenses: ["stairsOct", "elevOct", "elevator"],
+      dataKey: "october",
     },
   ];
+
+  const monthData = {
+    september: {
+      residents: {
+        ground: 0,
+        1: 0,
+        2: 1,
+        3: 1,
+        4: 1,
+        5: 1,
+        6: 2,
+        7: 2,
+        8: 2,
+        9: 1,
+        10: 1,
+        11: 0,
+      },
+      bills: {
+        stairsAug: 7.64,
+        elevAug: 13.28,
+        stairsSep: 0,
+        elevSep: 0,
+        elevator: 33.49,
+        connectivity: 37.07,
+      },
+    },
+    october: {
+      residents: {
+        ground: 2,
+        1: 0,
+        2: 1,
+        3: 1,
+        4: 1,
+        5: 1,
+        6: 2,
+        7: 2,
+        8: 2,
+        9: 1,
+        10: 1,
+        11: 1,
+      },
+      bills: {
+        stairsOct: 3.89,
+        elevOct: 10,
+        elevator: 33.49,
+      },
+    },
+  };
 
   const i18n = {
     bg: {
@@ -33,6 +120,7 @@
         emilia: "Емилия",
         alexander: "Александър",
         september: "Септември",
+        october: "Октомври",
       },
       columns: {
         apt: "Ап",
@@ -41,6 +129,8 @@
         elevAug: "Ток асансьор (август)",
         stairsSep: "Ток стълби",
         elevSep: "Ток асансьор",
+        stairsOct: "Ток стълби",
+        elevOct: "Ток асансьор",
         elevator: "Асансьор, месечна такса",
         connectivity: "Асансьор, годишна такса свързаност",
         total: "Общо",
@@ -48,6 +138,9 @@
       viewColumns: {
         alexander: {
           elevator: "Асансьор (септември)",
+        },
+        october: {
+          elevator: "Асансьор",
         },
       },
       billRow: "Общо по<br>сметка",
@@ -64,6 +157,7 @@
         emilia: "Эмилия",
         alexander: "Александр",
         september: "Сентябрь",
+        october: "Октябрь",
       },
       columns: {
         apt: "Кв",
@@ -72,6 +166,8 @@
         elevAug: "Эл. лифт (август)",
         stairsSep: "Эл. лестница",
         elevSep: "Эл. лифт",
+        stairsOct: "Эл. лестница",
+        elevOct: "Эл. лифт",
         elevator: "Лифт, месячная плата",
         connectivity: "Лифт, годовая плата за связь",
         total: "Итого",
@@ -80,65 +176,18 @@
         alexander: {
           elevator: "Лифт (сентябрь)",
         },
+        october: {
+          elevator: "Лифт",
+        },
       },
       billRow: "Итого по<br>счёту",
       ground: "Партер",
     },
   };
 
-  const STAIRS_PAYERS = new Set([
-    "ground",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-  ]);
-
-  const FULL_PAYERS = new Set(["4", "5", "6", "7", "8", "9", "10", "11"]);
-
-  const CATEGORY_PAYERS = {
-    stairsAug: STAIRS_PAYERS,
-    stairsSep: STAIRS_PAYERS,
-    elevAug: FULL_PAYERS,
-    elevSep: FULL_PAYERS,
-    elevator: FULL_PAYERS,
-    connectivity: FULL_PAYERS,
-  };
-
-  const APARTMENTS = [
-    { id: "ground", residents: 0 },
-    { id: "1", residents: 0 },
-    { id: "2", residents: 1 },
-    { id: "3", residents: 1 },
-    { id: "4", residents: 1 },
-    { id: "5", residents: 1 },
-    { id: "6", residents: 2 },
-    { id: "7", residents: 2 },
-    { id: "8", residents: 2 },
-    { id: "9", residents: 1 },
-    { id: "10", residents: 1 },
-    { id: "11", residents: 0 },
-  ];
-
-  const bills = {
-    stairsAug: 7.64,
-    elevAug: 13.28,
-    stairsSep: 0,
-    elevSep: 0,
-    elevator: 33.49,
-    connectivity: 37.07,
-  };
-
   const state = {
     lang: "bg",
-    view: "emilia",
+    view: "october",
     hasSettledInitialScroll: false,
   };
 
@@ -149,6 +198,10 @@
     expenseTable: document.getElementById("expenseTable"),
   };
 
+  function visibleViews() {
+    return VIEWS.filter((view) => !view.hidden);
+  }
+
   function round2(value) {
     return Math.round((value + Number.EPSILON) * 100) / 100;
   }
@@ -158,17 +211,24 @@
     return round2(value).toFixed(2).replace(".", ",");
   }
 
-  function peopleInGroup(payerSet) {
-    return APARTMENTS.reduce(
+  function apartmentsFor(data) {
+    return APT_IDS.map((id) => ({
+      id,
+      residents: data.residents[id] ?? 0,
+    }));
+  }
+
+  function peopleInGroup(apartments, payerSet) {
+    return apartments.reduce(
       (sum, apt) => (payerSet.has(apt.id) ? sum + apt.residents : sum),
       0
     );
   }
 
-  function shareFor(apt, category, billAmount) {
+  function shareFor(apt, category, billAmount, apartments) {
     const payers = CATEGORY_PAYERS[category];
     if (!payers.has(apt.id)) return null;
-    const people = peopleInGroup(payers);
+    const people = peopleInGroup(apartments, payers);
     if (!people || !billAmount) return 0;
     return round2((billAmount / people) * apt.residents);
   }
@@ -178,7 +238,10 @@
   }
 
   function currentView() {
-    return VIEWS.find((view) => view.id === state.view) || VIEWS[0];
+    return (
+      visibleViews().find((view) => view.id === state.view) ||
+      visibleViews()[0]
+    );
   }
 
   function equalizeRowHeights() {
@@ -218,7 +281,7 @@
     const dict = i18n[state.lang];
     els.viewTabs.innerHTML = "";
 
-    VIEWS.forEach((view) => {
+    visibleViews().forEach((view) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "month-tab";
@@ -285,10 +348,15 @@
   function renderTable() {
     const dict = i18n[state.lang];
     const view = currentView();
+    const data = monthData[view.dataKey];
+    const apartments = apartmentsFor(data);
     const expenseKeys = view.expenses;
     const cols = ["apt", "residents", ...expenseKeys, "total"];
 
-    els.expenseTable.classList.toggle("expense-table--wide", view.id === "september");
+    els.expenseTable.classList.toggle(
+      "expense-table--wide",
+      expenseKeys.length >= 5
+    );
 
     els.tableHead.innerHTML = `
       <tr>
@@ -306,14 +374,14 @@
     `;
 
     const billTotal = round2(
-      expenseKeys.reduce((sum, key) => sum + (bills[key] ?? 0), 0)
+      expenseKeys.reduce((sum, key) => sum + (data.bills[key] ?? 0), 0)
     );
 
     const billCells = expenseKeys
       .map(
         (key) =>
           `<td><div class="cell cell--money cell--bill">${formatMoney(
-            bills[key] ?? 0
+            data.bills[key] ?? 0
           )}</div></td>`
       )
       .join("");
@@ -331,12 +399,17 @@
     `,
     ];
 
-    APARTMENTS.forEach((apt) => {
+    apartments.forEach((apt) => {
       let rowTotal = 0;
       let participates = false;
       const moneyCells = expenseKeys
         .map((key) => {
-          const share = shareFor(apt, key, bills[key] ?? 0);
+          const share = shareFor(
+            apt,
+            key,
+            data.bills[key] ?? 0,
+            apartments
+          );
           if (share === null) {
             return `<td><div class="cell cell--na">—</div></td>`;
           }
