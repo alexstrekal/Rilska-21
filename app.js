@@ -21,9 +21,11 @@
     stairsAug: STAIRS_PAYERS,
     stairsSep: STAIRS_PAYERS,
     stairsOct: STAIRS_PAYERS,
+    stairsNov: STAIRS_PAYERS,
     elevAug: FULL_PAYERS,
     elevSep: FULL_PAYERS,
     elevOct: FULL_PAYERS,
+    elevNov: FULL_PAYERS,
     elevator: FULL_PAYERS,
     connectivity: FULL_PAYERS,
   };
@@ -57,6 +59,11 @@
       id: "october",
       expenses: ["stairsOct", "elevOct", "elevator"],
       dataKey: "october",
+    },
+    {
+      id: "november",
+      expenses: ["stairsNov", "elevNov", "elevator"],
+      dataKey: "november",
     },
   ];
 
@@ -106,6 +113,27 @@
         elevator: 33.49,
       },
     },
+    november: {
+      residents: {
+        ground: 0,
+        1: 0,
+        2: 1,
+        3: 1,
+        4: 1,
+        5: 1,
+        6: 2,
+        7: 2,
+        8: 2,
+        9: 1,
+        10: 1,
+        11: 1,
+      },
+      bills: {
+        stairsNov: 3.77,
+        elevNov: 9.14,
+        elevator: 33.74,
+      },
+    },
   };
 
   const i18n = {
@@ -121,6 +149,7 @@
         alexander: "Александър",
         september: "Септември",
         october: "Октомври",
+        november: "Ноември",
       },
       columns: {
         apt: "Ап",
@@ -131,6 +160,8 @@
         elevSep: "Ток асансьор",
         stairsOct: "Ток стълби",
         elevOct: "Ток асансьор",
+        stairsNov: "Ток стълби",
+        elevNov: "Ток асансьор",
         elevator: "Асансьор, месечна такса",
         connectivity: "Асансьор, годишна такса свързаност",
         total: "Общо",
@@ -140,6 +171,9 @@
           elevator: "Асансьор (септември)",
         },
         october: {
+          elevator: "Асансьор",
+        },
+        november: {
           elevator: "Асансьор",
         },
       },
@@ -158,6 +192,7 @@
         alexander: "Александр",
         september: "Сентябрь",
         october: "Октябрь",
+        november: "Ноябрь",
       },
       columns: {
         apt: "Кв",
@@ -168,6 +203,8 @@
         elevSep: "Эл. лифт",
         stairsOct: "Эл. лестница",
         elevOct: "Эл. лифт",
+        stairsNov: "Эл. лестница",
+        elevNov: "Эл. лифт",
         elevator: "Лифт, месячная плата",
         connectivity: "Лифт, годовая плата за связь",
         total: "Итого",
@@ -179,6 +216,9 @@
         october: {
           elevator: "Лифт",
         },
+        november: {
+          elevator: "Лифт",
+        },
       },
       billRow: "Итого по<br>счёту",
       ground: "Партер",
@@ -187,7 +227,7 @@
 
   const state = {
     lang: "bg",
-    view: "october",
+    view: "november",
     hasSettledInitialScroll: false,
   };
 
