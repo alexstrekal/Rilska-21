@@ -64,6 +64,7 @@
       id: "november",
       expenses: ["stairsNov", "elevNov", "elevator"],
       dataKey: "november",
+      unitRate: ["elevator"],
     },
   ];
 
@@ -265,11 +266,12 @@
     );
   }
 
-  function shareFor(apt, category, billAmount, apartments) {
+  function shareFor(apt, category, billAmount, apartments, unitRate) {
     const payers = CATEGORY_PAYERS[category];
     if (!payers.has(apt.id)) return null;
     const people = peopleInGroup(apartments, payers);
     if (!people || !billAmount) return 0;
+    if (unitRate) return round2(round2(billAmount / people) * apt.residents);
     return round2((billAmount / people) * apt.residents);
   }
 
@@ -448,7 +450,8 @@
             apt,
             key,
             data.bills[key] ?? 0,
-            apartments
+            apartments,
+            view.unitRate?.includes(key)
           );
           if (share === null) {
             return `<td><div class="cell cell--na">—</div></td>`;
